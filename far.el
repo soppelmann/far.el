@@ -133,12 +133,9 @@ Uses PAR, word list, LINES, from get-lines, and DP, the dp table."
              do (setq i j))
     (s-join "\n" (--map (concat prefix it) out))))
 
-(defvar far-fill-paragraph-width 80
-  "Width to fill paragraphs.")
-
 ;;;###autoload
 (defun far-fill-paragraph ()
-  "Fills paragraph at point to far-fill-paragraph-width chars."
+  "Fills paragraph at point to fill-column chars."
   (interactive)
   (let* ((para-end (save-excursion
                      (backward-paragraph)
@@ -148,7 +145,7 @@ Uses PAR, word list, LINES, from get-lines, and DP, the dp table."
                      (point)))
          (para-start (region-beginning))
          (para (buffer-substring-no-properties para-start para-end))
-         (rewrapped (far--process para far-fill-paragraph-width)))
+         (rewrapped (far--process para fill-column)))
     ;; hack to make sure indentation is preserved correctly
     (replace-region-contents (+ (if (s-prefix? "\n" para) 1 0) para-start)
                              para-end (lambda () rewrapped))))
